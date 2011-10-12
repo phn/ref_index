@@ -115,7 +115,7 @@ from __future__ import division
 from __future__ import print_function
 import logging
 
-__version__ = "1.0b"
+__version__ = "1.0"
 
 logger = logging.getLogger("ref_index")
 logger.setLevel(logging.DEBUG)
