@@ -899,3 +899,12 @@ def _test_idlastro():
         assert abs(i - j / 10.0) < 1e-4
 
     #return wave_idl_vactoair, wave_idl_airtovac
+
+
+def _run_tests():
+    import sys
+    m = sys.modules[__name__]
+    x = dir(m)
+    tests = [getattr(m, i) for i in x if i.startswith("_test")]
+    for test in tests:
+        test()
