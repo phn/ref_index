@@ -681,8 +681,7 @@ def vac2air(wave, t=15.0, p=101325, rh=0.0, co2=450, warn=False):
     if warn:
         _check_range(wave, t, p, rh, co2)
 
-    xv = rh2mole_fraction(rh, p, t)
-    n = ciddor_ri(wave, t, p, xv, co2)
+    n = ciddor(wave, t, p, rh, co2)
     return wave / n
 
 
@@ -725,8 +724,7 @@ def air2vac(wave, t=15.0, p=101325, rh=0.0, co2=450, warn=False):
     if warn:
         _check_range(wave=wave, t=t, p=p, rh=rh, co2=co2)
 
-    xv = rh2mole_fraction(rh, p, t)
-    n = ciddor_ri(wave, t, p, xv, co2)
+    n = ciddor(wave, t, p, rh, co2)
     return wave * n
 
 
@@ -746,6 +744,15 @@ def _test_nist_ciddor_1():
     xv = rh2mole_fraction(50, 101325, 20)
 
     n = [ciddor_ri(i, 20, 101325, xv) for i in wave]
+    wave_n = [vac2air(i, t=20, p=101325, rh=50.0) for i in wave]
+
+    for i, j in zip(n, nist_n):
+        assert abs(i - j) < 1e-8
+
+    for i, j in zip(wave_n, nist_w):
+        assert abs(i - j) < 1e-6
+
+    n = [ciddor(i, 20, 101325, 50.0) for i in wave]
     wave_n = [vac2air(i, t=20, p=101325, rh=50.0) for i in wave]
 
     for i, j in zip(n, nist_n):
@@ -907,4 +914,5 @@ def _run_tests():
     x = dir(m)
     tests = [getattr(m, i) for i in x if i.startswith("_test")]
     for test in tests:
+        print(test.__name__)
         test()
