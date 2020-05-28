@@ -9,7 +9,7 @@ version = ref_index.__version__
 description = """\
 Refractive index of air, and vacuum-air wave length conversion."""
 
-long_description = open("README.rst").read()
+long_description = open("README.rst", encoding="utf-8").read()
 
 setup(
     name="ref_index",
